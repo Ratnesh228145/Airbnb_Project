@@ -7,8 +7,6 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const Review = require("./models/review.js");
-const {listingSchema, reviewSchema} = require("./schema.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const session = require("express-session");
@@ -58,6 +56,7 @@ app.use(flash());
 
 app.use((req, res, next)=>{
   res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 
@@ -68,19 +67,6 @@ app.use("/listings/:id/reviews", reviews);
 
 
 
-// app.get("/testListing", async(req,res)=>{
-//     let sampleListing = new Listing({
-//         title:"My new villa",
-//         description:"by the beach",
-//         price:1200,
-//         location:"calangute, Goa",
-//         country: "India"
-//     });
-
-//     await sampleListing.save();
-//     console.log("sample was saved");
-//     res.send("successful testing");
-// })
 
 app.use((req, res, next)=>{
     next(new ExpressError(404, "Page not found!"));
